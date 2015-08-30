@@ -1,6 +1,11 @@
 extends layout
 
-block content
-  h1= message
+block pageContent
+  h1= message + ' >,<'
   h2= error.status
   pre #{error.stack}
+  br
+  p Please contact Chris about this error. 
+    | Include a screenshot and any other pertinent information.
+  br
+  br

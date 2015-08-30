@@ -3,5 +3,29 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(href='https://fonts.googleapis.com/css?family=Maven+Pro' rel='stylesheet' type='text/css')
+    
+    script(src="https://code.jquery.com/jquery-2.1.4.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.7/p5.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.7/addons/p5.dom-min.js")
   body
-    block content
+    div#pageHeader.wrapper.clearfix
+      div#headerLinks
+        div.headerLinkDiv
+          a.headerLinkA(href='/') Home
+        div.headerLinkDiv
+          a.headerLinkA(href='/auth/login') Login
+        div.headerLinkDiv
+          a.headerLinkA(href='/auth/logout') Logout
+        div.headerLinkDiv
+          a.headerLinkA(href='/account/details') Account
+        div.headerLinkDiv
+          a.headerLinkA(href='/part/upload') Upload
+      block pageHeader
+      include ./includes/ascii_spoon.jade
+      include ./includes/ascii_title.jade
+      
+    div#pageContent.wrapper
+      block pageContent

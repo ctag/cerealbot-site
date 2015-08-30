@@ -1,0 +1,10 @@
+extends layout
+
+block pageContent
+  p authMethod: #{user.authMethod}
+  case user.authMethod
+    when 'google'
+      each val, index in user
+        p= index + ': ' + val
+    default
+      p authMethod listout not implemented. This is an error.

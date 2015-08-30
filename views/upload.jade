@@ -1,0 +1,9 @@
+extends layout
+
+block pageContent
+  h1= title
+  p Welcome to #{title}
+  hr
+  form(action="/part/upload" method="post" enctype="multipart/form-data")
+    input(name="part" type="file")
+    input(type="submit" value="Submit")

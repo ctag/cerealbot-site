@@ -1,3 +1,12 @@
+# api keys and passwords not to be committed
+secrets.*
+
+# Database and upload files/dir
+uploads
+*.sqlite
+*.sql
+*.dump
+
 # Logs
 logs
 *.log

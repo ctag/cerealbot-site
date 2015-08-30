@@ -1,17 +1,43 @@
 {
+  "author": {
+    "name": "Christopher Bero",
+    "email": "csb0019@uah.edu",
+    "url": "https://256.makerslocal.org/wiki/Cerealbot"
+  },
   "name": "cerealbox-site",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
+  "license": "SEE LICENSE FILE",
   "scripts": {
     "start": "node ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
+    "cluster": "^0.7.7",
+    "cluster-store": "^1.0.0",
     "cookie-parser": "~1.3.5",
     "debug": "~2.2.0",
     "express": "~4.13.1",
+    "express-session": "^1.11.3",
+    "extend": "^3.0.0",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
-    "serve-favicon": "~2.3.0"
+    "multer": "^1.0.3",
+    "passport": "^0.3.0",
+    "passport-google-oauth": "^0.2.0",
+    "passport-ldap": "https://github.com/meryt/passport-ldap/archive/v0.0.5.tar.gz",
+    "passport-ldapauth": "^0.3.0",
+    "passport-local": "^1.0.0",
+    "passport-openid": "^0.3.1",
+    "request": "^2.61.0",
+    "serve-favicon": "~2.3.0",
+    "sqlite3": "^3.0.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ctag/cerealbox-site"
+  },
+  "config": {
+    "port": "3000"
   }
 }

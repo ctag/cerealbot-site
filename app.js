@@ -24,8 +24,7 @@ var session = require('express-session');
 var cluster = require('cluster');
 var cstore = require('cluster-store');
 
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('./main.sqlite');
+var sql = require('./midware/sql.js');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -120,98 +119,10 @@ upload.single('part'),
 function (req, res, next) {
   //console.log("Form's body (text): ", req.body);
   console.log("File: ", req.file);
-  sqlCreatePart(req.file, req.user, function (err, changes) {
+  sql.createPart(req.file, req.user, function (err, changes) {
     res.render('uploaded', { title: 'Upload landing page', err: err, changes: changes });
   });
 });
-
-////////////////////
-// SQLite testing //
-////////////////////
-
-function sqlCreatePart (part, user, callback) {
-  db.serialize(function () {
-    db.run('INSERT INTO parts (originalName, filename, path, size, userId) VALUES (?, ?, ?, ?, ?)',
-  part.originalname, part.filename, part.path, part.size, user.id,
-  function (err) {
-    console.log("SQL errors: ", err);
-    if (err === null) {
-      console.log("Num rows changed: ", this.changes);
-    }
-    callback(err, this.changes);
-  });
-  });
-}
-
-function sqlCreateAccount (user, callback) {
-  db.serialize(function () {
-    db.run('INSERT INTO users (id, authMethod, givenName, familyName, accountType) VALUES (?, ?, ?, ?, ?)',
-  user.id, user.authMethod, user.givenName, user.familyName, user.accountType,
-  function (err) {
-    console.log("SQL errors: ", err);
-    if (err === null) {
-      console.log("Num rows changed: ", this.changes);
-    }
-    //callback(err, this.changes);
-  });
-  });
-}
-
-function sqlLogin (user, callback) {
-  db.serialize(function () {
-    db.run('UPDATE users SET numLogins=?, lastLogIn=? WHERE id=?;',
-  (user.numLogins+1), new Date().toString(), user.id,
-  function (err) {
-    console.log("SQL errors: ", err);
-    if (err === null) {
-      console.log("Num rows changed: ", this.changes);
-    }
-    //callback(err, this.changes);
-  });
-  });
-}
-
-function sqlFetchUser (id, authMethod, callback) {
-  if (req.authMethod !== 'google') {
-    callback(null);
-  }
-  if (typeof(req.user.id) !== 'string') {
-    callback(null);
-  }
-  var googleId = req.user.id;
-  //db.serialize(function () {
-    console.log("Finding account for " + googleId);
-    db.get('SELECT * FROM users WHERE googleId=?;', googleId,
-    function (err, row) {
-      if (typeof(row) === 'undefined') {
-        callback(null);
-      }
-      //console.log("returned row: ", row);
-      callback(row);
-    });
-  //});
-}
-
-// user = req.user
-function sqlFetchActiveUser (user, callback) {
-  // Make sure req is valid
-  if (user.authMethod !== 'google' && user.authMethod !== 'ldap' && user.authMethod !== 'local') {
-    callback(null);
-  }
-  if (typeof(user.id) !== 'string') {
-    callback(null);
-  }
-  // Check for google auth
-  if (user.authMethod === 'google') {
-    console.log("Finding google user for " + user.id);
-    db.get('SELECT * FROM users WHERE authMethod=? AND id=?;', user.authMethod, user.id,
-    function (err, row) {
-      // row is undefined if user is not in DB
-      callback(row);
-      return;
-    });
-  }
-}
 
 ////////////////////
 // passport setup //
@@ -247,7 +158,7 @@ passport.use(new GoogleStrategy({
     // insert identifier into database
     //console.log(accessToken, refreshToken, profile);
     profile.authMethod = 'google';
-    sqlFetchActiveUser(profile, function(user) {
+    sql.fetchActiveUser(profile, function(user) {
       console.log("SQL found: ", typeof(user));
       if (typeof(user) === 'undefined') {
         profile.type = 'visitor';
@@ -255,7 +166,7 @@ passport.use(new GoogleStrategy({
         // User found in database
         extend(true, profile, user);
       }
-      sqlLogin(profile);
+      sql.login(profile);
       console.log("User logged in with: ", profile);
       return done(null, profile);
     });

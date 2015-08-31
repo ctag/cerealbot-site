@@ -81,6 +81,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(function (req, res, next) {
+  console.log('\n[' + new Date() + '] Request from: ', req.headers['x-forwarded-for']);
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // directory based routes
@@ -142,6 +147,20 @@ function sqlCreateAccount (user, callback) {
   db.serialize(function () {
     db.run('INSERT INTO users (id, authMethod, givenName, familyName, accountType) VALUES (?, ?, ?, ?, ?)',
   user.id, user.authMethod, user.givenName, user.familyName, user.accountType,
+  function (err) {
+    console.log("SQL errors: ", err);
+    if (err === null) {
+      console.log("Num rows changed: ", this.changes);
+    }
+    //callback(err, this.changes);
+  });
+  });
+}
+
+function sqlLogin (user, callback) {
+  db.serialize(function () {
+    db.run('UPDATE users SET numLogins=?, lastLogIn=? WHERE id=?;',
+  (user.numLogins+1), new Date().toString(), user.id,
   function (err) {
     console.log("SQL errors: ", err);
     if (err === null) {
@@ -236,6 +255,7 @@ passport.use(new GoogleStrategy({
         // User found in database
         extend(true, profile, user);
       }
+      sqlLogin(profile);
       console.log("User logged in with: ", profile);
       return done(null, profile);
     });

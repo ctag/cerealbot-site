@@ -1,18 +1,17 @@
 extends layout
 
 block pageContent
-  br
-  br
-  form(action='/api/auth/login' method='post')
-    div(class="form-group")
-      label Email
+  div.wrapper
+    form(action='/api/auth/login' method='post' style="text-align: left;")
+      div(class="formGroup")
+        label Email
+        br
         input(type="text" class="form-control" name="email")
-    div(class="form-group")
-      label Password
-      input(type="password" class="form-control" name="password")
-    button(type="submit" class="btn btn-warning btn-lg") Login
-  br
-  br
-  a(href='/auth/google') Login with Google
-  br
-  br
+      div(class="formGroup")
+        label Password
+        br
+        input(type="password" class="form-control" name="password")
+      button(type="submit" class="btn btn-warning btn-lg") Login
+  div.wrapper
+    div.buttonLink
+      a(href='/auth/google') Login with Google

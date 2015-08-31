@@ -14,7 +14,7 @@ a {
 
 #pageHeader {
   position: relative;
-  padding: 0px;
+  padding: 20px;
 }
 
 #headerLinks {
@@ -24,7 +24,7 @@ a {
   left: 5px;
 }
 
-.headerLinkDiv {
+.buttonLink {
   padding: 5px;
   margin: 5px;
   background: #3f3545;
@@ -32,23 +32,24 @@ a {
   display: inline-block;
 }
 
-.headerLinkA {
+.buttonLink a {
   display: inline-block;
   float: left;
   text-decoration: none;
 }
 
-#pageContent {
-
+.wrapper p {
+  text-align: left;
 }
 
 .wrapper {
   width: 900px;
   margin: 0 auto;
   margin-bottom: 20px;
-  min-height: 50px;
+  min-height: 20px;
   background-color: rgba(32, 27, 41, 0.6);
   text-align: center;
+  padding: 20px;
 }
 
 .clearfix:after {
@@ -59,8 +60,6 @@ a {
 }
 
 .asciiArt {
-  /*position: relative;
-  left: 30%;*/
   float: right;
   padding: 0px;
   margin: 5px;
@@ -69,4 +68,8 @@ a {
   font-weight: 600;
   line-height: 6px;
   text-align: left;
+}
+
+.formGroup {
+  margin-bottom: 10px;
 }

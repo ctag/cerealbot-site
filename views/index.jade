@@ -1,11 +1,52 @@
 extends layout
 
 block pageContent
-  h1= title
-  p Welcome to #{title}
-  hr
-  p(style="text-align: left; padding: 20px;")
-    | I don't believe in calling a product 'beta', so this website isn't going to be "Cerealbox Beta" 
-    br
-    br
-    | It will however be a little bug and error prone while I work on it during this semester. Please bear with me and let me know your mind if you'd like an aspect changed. I am much more likely to devote time to this site and project if I feel people are waiting on and expecting to use this tool ^_^
+  div.wrapper
+    h2 What is this?
+    p
+      strong Cerealbot 
+      | is a 3D printer that I'm modifying to run unattended.
+      br
+      strong Cerealbox 
+      | is the computer this website (and the printer) runs on.
+      br
+      | Unfortunately, I use these terms rather interchangeably.
+      br
+      br
+      | I hope that by reducing the interaction and maintenance required for existing consumer level FDM printers, a small number of printers can provide service to a large group of students and makers. To do this the printer must be utilized as close to 24/7 as possible, and must be able to sequentially print parts without human intervention.
+  div.wrapper
+    h2 How do I sign up?
+    p
+      | While I work out the more obvious bugs and features of this site, I ask that only teachers in MCS (with exceptions) create accounts. These accounts will then be used to proxy student print requests. Once everything is running smoothly, I'll reorganize to allow a teacher to student account mapping and have the sign up process automated.
+      br
+      br
+      | Login is currently via Google's oath2 token. This will allow those with Google Classroom (really any Google account) to log in without creating a new password just for me. In the way of privacy concerns: this server will be able to see a few account details such as name, current profile image, and whether you have a G+ account, but that's about it.
+      br
+      br
+      strong Process
+      br
+      | Go to the [Login] page.
+      br
+      | Click "Sign in with Google" and then sign into your Google account.
+      br
+      | On the landing page (account details) you can see all of the information returned from Google in addition to anything I have stored in the database.
+      br
+      | Copy the fields id and displayName. Send me an email with that in addition to your school name and I will manually create the account.
+      br
+      br
+      strong Redirections
+      br
+      | If your session becomes inactive or invalid, then any link that isn't open to the general public will redirect back to the [Login] page. This is a little jarring, but I'll work on a solution as the site progresses.
+  div.wrapper
+    h2 How do I print something?
+    p
+      | This is still a little (lot) rough around the edges. Once you have an account, you may go to the [Upload] page and submit a .stl file to be printed. If you don't hear back from me within a week or so, you may have to send me an email and check that the part upload was successful.
+      br
+      | I'm actively working on a parts management page that will let you see where your parts are in the queue and let me manage which ones to print next.
+  div.wrapper
+    h2 Is that header.. 
+      a(target="new",href="https://en.wikipedia.org/wiki/ASCII_art") ASCII art
+      | ?
+    p
+      | Yes, yes it is! ASCII art is a wonderful way to provide images that have low bandwidth density compared with bitmaps and traditional image formats. If a student wants to take a swing at it, I welcome new artwork for the site that fits within 50 characters wide by 25 characters tall.
+    

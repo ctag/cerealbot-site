@@ -1,11 +1,10 @@
 extends layout
 
 block pageContent
-  h1= message + ' >,<'
-  h2= error.status
-  pre #{error.stack}
-  br
-  p Please contact Chris about this error. 
-    | Include a screenshot and any other pertinent information.
-  br
-  br
+  div.wrapper
+    h1= message + ' >,<'
+    //h2= error.status
+    pre #{error.stack}
+  div.wrapper
+    p Please contact Chris about this error. 
+      | Include a screenshot and any other pertinent information.

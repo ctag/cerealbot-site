@@ -13,19 +13,26 @@ html
   body
     div#pageHeader.wrapper.clearfix
       div#headerLinks
-        div.headerLinkDiv
-          a.headerLinkA(href='/') Home
-        div.headerLinkDiv
-          a.headerLinkA(href='/auth/login') Login
-        div.headerLinkDiv
-          a.headerLinkA(href='/auth/logout') Logout
-        div.headerLinkDiv
-          a.headerLinkA(href='/account/details') Account
-        div.headerLinkDiv
-          a.headerLinkA(href='/part/upload') Upload
+        div.buttonLink
+          a(href='/') Home
+        div.buttonLink
+          a(href='/auth/login') Login
+        div.buttonLink
+          a(href='/auth/logout') Logout
+        div.buttonLink
+          a(href='/account/details') Account
+        div.buttonLink
+          a(href='/part/upload') Upload
       block pageHeader
       include ./includes/ascii_spoon.jade
       include ./includes/ascii_title.jade
+    
+    block pageContent
+    
+    div.wrapper
+      | Site licensed under GPLv2. Source on 
+      a(href="https://github.com/ctag/cerealbox-site") github
+      | .
       
-    div#pageContent.wrapper
-      block pageContent
+    
+    

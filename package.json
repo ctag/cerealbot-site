@@ -21,6 +21,7 @@
     "express-session": "^1.11.3",
     "extend": "^3.0.0",
     "jade": "~1.11.0",
+    "moment": "^2.10.6",
     "morgan": "~1.6.1",
     "multer": "^1.0.3",
     "passport": "^0.3.0",

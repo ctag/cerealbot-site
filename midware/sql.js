@@ -6,10 +6,27 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./main.sqlite');
 var sql = {};
 
+sql.getAllParts = function (callback) {
+  db.serialize(function () {
+    db.all('SELECT * FROM parts',
+  function (err, rows) {
+    console.log("SQL errors: ", err);
+    if (err === null) {
+      if (typeof(callback) === 'function') {
+        callback(err, rows);
+      }
+    }
+  });
+  });
+};
+
 sql.createPart = function (part, user, callback) {
   db.serialize(function () {
-    db.run('INSERT INTO parts (originalName, filename, path, size, userId) VALUES (?, ?, ?, ?, ?)',
+    db.run('INSERT INTO parts '+
+    '(originalName, filename, path, size, userId, infoX, infoY, infoZ, infoFacets, infoShells, infoVolume, infoRepaired)'+
+    ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
   part.originalname, part.filename, part.path, part.size, user.id,
+  part.info.x, part.info.y, part.info.z, part.info.facets, part.info.shells, part.info.volume, part.info.repaired,
   function (err) {
     console.log("SQL errors: ", err);
     if (err === null) {

@@ -1,7 +1,11 @@
 extends layout
 
 block pageContent
-  h1= title
-  hr
-  p= err
-  p= changes
+  div.wrapper
+    h1= title
+    p
+      | Errors:
+      = err
+    p
+      | Changes: 
+      = changes

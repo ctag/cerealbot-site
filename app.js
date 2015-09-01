@@ -11,14 +11,28 @@ var express = require('express');
 var path = require('path');
 var util = require('util');
 var os = require('os');
+var exec = require('child_process').exec;
 var numCores = os.cpus().length;
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var extend = require('extend');
+var moment = require('moment');
 var multer = require('multer');
-var upload = multer({ dest: 'uploads/', fileFilter: fileFilter });
+var uploadStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, req.user.id + '_' + moment().format('YYYYMMDD_hhmmss') + '.stl');
+  }
+});
+var upload = multer({
+  dest: 'uploads/',
+  fileFilter: fileFilter,
+  storage: uploadStorage
+});
 
 var session = require('express-session');
 var cluster = require('cluster');
@@ -86,6 +100,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 // directory based routes
 app.use('/', route_root);
@@ -93,6 +108,13 @@ app.use('/auth', route_auth);
 app.use('/api', route_api);
 app.use('/account', route_account);
 //app.use(multer( {dest: './uploads/'} ));
+
+app.get('/part/list', function (req, res, next) {
+  sql.getAllParts(function (err, rows) {
+    console.log("part array: ", rows);
+    res.render('partList', { rows: rows });
+  });
+});
 
 app.get('/part/upload', function (req, res, next) {
   res.render('upload');
@@ -119,8 +141,49 @@ upload.single('part'),
 function (req, res, next) {
   //console.log("Form's body (text): ", req.body);
   console.log("File: ", req.file);
-  sql.createPart(req.file, req.user, function (err, changes) {
-    res.render('uploaded', { title: 'Upload landing page', err: err, changes: changes });
+  var command = 'slic3r.pl --info ' + req.file.path;
+  exec(command, function (err, stdout, stderr) {
+    console.log("errors: ", err);
+    var stdoutArr = stdout.split('\n');
+    console.log("stdout: ", stdoutArr);
+
+    var dim_regex = /x=([\d.]+) y=([\d.]+) z=([\d.]+)$/;
+    var dim_result = dim_regex.exec(stdoutArr[1]);
+    var x_val = dim_result[1];
+    var y_val = dim_result[2];
+    var z_val = dim_result[3];
+
+    var facet_regex = /facets:\s+(\d+)$/;
+    var facet_val = facet_regex.exec(stdoutArr[2])[1];
+
+    var shell_regex = /shells:\s+(\d+)$/;
+    var shell_val = shell_regex.exec(stdoutArr[3])[1];
+
+    var volume_regex = /volume:\s+([\d.]+)$/;
+    var volume_val = volume_regex.exec(stdoutArr[4])[1];
+
+    var repair_regex = /repair:\s+(\w+)$/;
+    var repair_val = repair_regex.exec(stdoutArr[5])[1];
+
+    console.log('Dims: ', x_val, y_val, z_val);
+    console.log('facets: ', facet_val);
+    console.log('shells: ', shell_val);
+    console.log('volume: ', volume_val);
+    console.log('Repaired: ', repair_val);
+
+    var info = {};
+    info.x = x_val;
+    info.y = y_val;
+    info.z = z_val;
+    info.facets = facet_val;
+    info.shells = shell_val;
+    info.volume = volume_val;
+    info.repaired = ((repaired_val==='yes') ? 1 : 0);
+    req.file.info = info;
+
+    sql.createPart(req.file, req.user, function (err, changes) {
+      res.render('uploaded', { title: 'Upload landing page', err: err, changes: changes });
+    });
   });
 });
 

@@ -1,0 +1,34 @@
+extends layout
+
+block pageContent
+  each row, i in rows
+    div.wrapper
+      h2= row.id
+      p
+        | Original Filename: 
+        = row.originalName
+        br
+        | Current Filename:
+        a(href='../#{row.fileName}')
+          = row.fileName
+        br
+        | File size (b): 
+        = row.size
+        br
+        | User Id:
+        = row.userId
+        br
+        | Upload Time: 
+        = row.uploadTime
+        br
+        | Number of Prints: 
+        = row.numPrints
+        br
+        | Dimensions (mm): 
+        = 'x:'+row.infoX+' y:'+row.infoY+' z:'+row.infoZ
+        br
+        | Volume (mm^3): 
+        = row.infoVolume
+        br
+        | Had to be repaired: 
+        = row.infoRepaired

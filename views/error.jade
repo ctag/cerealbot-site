@@ -2,8 +2,9 @@ extends layout
 
 block pageContent
   div.wrapper
-    h1= message + ' >,<'
+    h1= 'Uhoh, error' + ' >,<'
     //h2= error.status
+  div.wrapper
     pre #{error.stack}
   div.wrapper
     p Please contact Chris about this error. 

@@ -3,7 +3,7 @@ secrets.*
 
 # Database and upload files/dir
 uploads
-*.sqlite
+*.sqlite*
 *.sql
 *.dump
 

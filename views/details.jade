@@ -7,5 +7,8 @@ block pageContent
       when 'google'
         each val, index in user
           p= index + ': ' + val
+      when 'ldap'
+        each val, index in user
+          p= index + ': ' + val
       default
         p authMethod listout not implemented. This is an error.

@@ -18,6 +18,7 @@ router.get('/home', function(req, res, next) {
 router.get('/details',
 restrict.auth,
 function(req, res, next) {
+  console.log("Account details for: ", req.user);
   res.render('details', {
     title: 'Account Details',
     user: req.user

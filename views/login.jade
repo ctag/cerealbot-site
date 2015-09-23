@@ -15,3 +15,14 @@ block pageContent
   div.wrapper
     div.buttonLink
       a(href='/auth/google') Login with Google
+  div.wrapper
+    form(action='/auth/ldap' method='post' style="text-align: left;")
+      div(class="formGroup")
+        label Makers Local 256 LDAP Username
+        br
+        input(type="text" class="form-control" name="username")
+      div(class="formGroup")
+        label Password
+        br
+        input(type="password" class="form-control" name="password")
+      button(type="submit" class="btn btn-warning btn-lg") Login

@@ -17,7 +17,8 @@ function validUser(req) {
   if (typeof(req.user.authMethod) !== 'string') {
     return (false);
   }
-  if (req.user.accountType === 'student' || req.user.accountType === 'teacher' || req.user.accountType === 'admin') {
+  if (req.user.accountType === 'student' || req.user.accountType === 'teacher' ||
+  req.user.accountType === 'admin' || req.user.authMethod === 'ldap') {
   console.log("Valid user.");
   return (true);
   }

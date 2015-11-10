@@ -21,12 +21,21 @@ sql.getAllParts = function (callback) {
 };
 
 sql.createPart = function (part, user, callback) {
+  var id;
+  if (user.authMethod === 'google') {
+    id = user.id;
+  } else if (user.authMethod === 'ldap') {
+    id = user.uid;
+  } else {
+    console.log("SQL Create Part error, no user id!");
+    return;
+  }
   db.serialize(function () {
     db.run('INSERT INTO parts '+
     '(originalName, filename, path, size, userId, infoX, infoY, infoZ, infoFacets, infoShells, infoVolume, infoRepaired)'+
     ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-  part.originalname, part.filename, part.path, part.size, user.id,
-  part.info.x, part.info.y, part.info.z, part.info.facets, part.info.shells, part.info.volume, part.info.repaired,
+  part.originalname, part.filename, part.path, part.size, id,
+  part.info.x, part.info.y, part.info.z, part.info.facets, part.info.shells, part.info.volume, part.info.repair,
   function (err) {
     console.log("SQL errors: ", err);
     if (err === null) {

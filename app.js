@@ -25,7 +25,7 @@ var uploadStorage = multer.diskStorage({
     cb(null, './uploads');
   },
   filename: function (req, file, cb) {
-    cb(null, req.user.id + '_' + moment().format('YYYYMMDD_hhmmss') + '.stl');
+    cb(null, (req.user.id||req.user.uid) + '_' + moment().format('YYYYMMDD_hhmmss') + '.stl');
   }
 });
 var upload = multer({
@@ -178,7 +178,7 @@ function (req, res, next) {
     info.facets = facet_val;
     info.shells = shell_val;
     info.volume = volume_val;
-    info.repaired = ((repaired_val==='yes') ? 1 : 0);
+    info.repair = ((repair_val==='yes') ? 1 : 0);
     req.file.info = info;
 
     sql.createPart(req.file, req.user, function (err, changes) {
@@ -260,7 +260,7 @@ passport.use(new LDAPStrategy(
   function(profile, done) {
     console.log("LDAP Profile: ", profile);
     profile.authMethod = 'ldap';
-    profile.type = 'visitor';
+    profile.type = 'maker';
     return done(null, profile);
   }
 ));
